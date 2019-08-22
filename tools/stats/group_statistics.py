@@ -6,8 +6,6 @@ import re
 from collections import namedtuple
 
 
-
-
 class ScontrolEntry:
     def __init__(self, _string):
         d = self.parse(_string)
@@ -21,8 +19,13 @@ class ScontrolEntry:
         
     def parse(self, line):
         required = [
-            'TRES', 'JobId', 'SubmitTime', 'UserId',
-            'Account', 'GroupId', 'JobState'
+            'TRES', 'JobId', 
+            # 'SubmitTime', 
+            'RunTime',
+            'UserId',
+            'Account', 
+            'GroupId', 'JobState', 
+            'BatchFlag'
         ]
         entries = line.split()
         _dict = {}
@@ -216,7 +219,14 @@ def summarize(jobs_table, nodes_table):
 
 if __name__ == '__main__':
     pd.set_option('expand_frame_repr', False)
-    # print(stats.jobs.cvit())
+    print(stats.jobs.cvit())
+    print()
+    print(stats.jobs.account('nlp'))
+    print()
+    print(stats.jobs.account('ccnsb'))
+    print()
+    print(stats.jobs.account('research'))
+    print()
     summary = summarize(stats.jobs, stats.nodes)
     print(summary)
 

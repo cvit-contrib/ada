@@ -17,6 +17,7 @@ stats = Stats(jobs=ScontrolTable(), nodes=ScontrolNodesTable())
 
 def violators():
     cvit = stats.jobs.account('cvit')
+    violators = cvit[cvit["Reservation"].isna()]
     for idx, row in cvit.iterrows():
         key = row['User']
         ue = ut.directory[key]

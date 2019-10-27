@@ -26,7 +26,8 @@ class ScontrolEntry:
             'Account', 
             'GroupId', 'JobState', 
             'BatchFlag',
-            'Reservation'
+            'Reservation',
+            'Partition'
         ]
         entries = line.split()
         _dict = {}

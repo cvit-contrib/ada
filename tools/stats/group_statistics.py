@@ -33,18 +33,30 @@ def violators():
         print('scancel --signal HUP {}'.format(row['JobId']), end=' ')
         print("# {} <{}>".format(name, email))
 
+def info_all():
+    def _print(title, _object):
+        print(title)
+        print("-"*len(title))
+        print(_object)
+        print()
+
+    _print("Summary", summarize(stats.jobs, stats.nodes))
+    for account in ['cvit', 'research']:
+        _print(account, stats.jobs.account(account))
+
 if __name__ == '__main__':
     actions = {
             "violators": violators,
             "cvit": lambda: print(stats.jobs.account('cvit')),
             "nlp": lambda: print(stats.jobs.account('nlp')),
             "research": lambda:  print(stats.jobs.account('research')),
-            "summary": lambda: print(summarize(stats.jobs, stats.nodes))
+            "summary": lambda: print(summarize(stats.jobs, stats.nodes)),
+            "all": info_all
     }
 
     parser = ArgumentParser()
     ops = list(actions.keys())
-    parser.add_argument('op', choices=ops)
+    parser.add_argument('op', choices=ops, default='all', const='all', nargs='?')
     args = parser.parse_args()
     actions[args.op]()
 

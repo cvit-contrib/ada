@@ -46,7 +46,7 @@ class ScontrolTable:
     def __init__(self):
         output = sp.check_output("scontrol show jobs -o", shell=True).decode("utf-8")
         ses = [ScontrolEntry(line).df for line in output.splitlines()]
-        self.df = pd.concat(ses, axis=0)
+        self.df = pd.concat(ses, axis=0, sort=True)
         # self.df = self.df.dropna()
         tres = ScontrolTable.computeTRES(self.df)
         self.df = pd.merge(tres, self.df, on='JobId')
@@ -104,7 +104,7 @@ class ScontrolTable:
             return pd.DataFrame.from_dict(_d)
         
         tdf = df["TRES"].apply(parse)
-        ndf = pd.concat(tdf.tolist(), axis=0)
+        ndf = pd.concat(tdf.tolist(), axis=0, sort=True)
         ndf["JobId"] = df["JobId"]
         return ndf
     

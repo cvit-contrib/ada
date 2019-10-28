@@ -57,10 +57,6 @@ class Node:
                 self.free.cpu == 0 or \
                 self.free.mem == 0)
 
-
-        
-        
-
 def get_nodes():
     required = ["CfgTRES", "AllocTRES", "NodeName"]
     output = run("scontrol show nodes -o")

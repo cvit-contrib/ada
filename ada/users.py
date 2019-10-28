@@ -23,3 +23,5 @@ class UserTable:
                 ue = UserEntry(user)
                 if int(ue.uid) > 1000:
                     self.directory[ue.user] = ue
+    def __getitem__(self, user):
+        return self.directory[user]

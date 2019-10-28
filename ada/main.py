@@ -1,14 +1,16 @@
+import re
+import os
+os.environ['OMP_NUM_THREADS'] = '1'
 import subprocess as sp
 import pandas as pd
-pd.set_option('expand_frame_repr', False)
 from collections import defaultdict
 import humanfriendly
-import re
 from collections import namedtuple
 from ada.users import UserTable
 from ada.scontrol import ScontrolTable, ScontrolNodesTable
 from ada.summary import summarize
 from argparse import ArgumentParser
+pd.set_option('expand_frame_repr', False)
 
 
 

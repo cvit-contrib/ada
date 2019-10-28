@@ -5,9 +5,9 @@ from collections import defaultdict
 import humanfriendly
 import re
 from collections import namedtuple
-from users import UserTable
-from scontrol import ScontrolTable, ScontrolNodesTable
-from summary import summarize
+from ada.users import UserTable
+from ada.scontrol import ScontrolTable, ScontrolNodesTable
+from ada.summary import summarize
 from argparse import ArgumentParser
 
 

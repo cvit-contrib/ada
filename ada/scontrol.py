@@ -4,7 +4,7 @@ from collections import defaultdict
 import humanfriendly
 import re
 from collections import namedtuple
-from users import UserTable
+from ada.users import UserTable
 
 class ScontrolEntry:
     def __init__(self, _string):

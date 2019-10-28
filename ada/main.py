@@ -10,12 +10,9 @@ from scontrol import ScontrolTable, ScontrolNodesTable
 from summary import summarize
 from argparse import ArgumentParser
 
-Stats = namedtuple('Stats', 'jobs nodes')
-ut = UserTable()
-stats = Stats(jobs=ScontrolTable(), nodes=ScontrolNodesTable())
 
 
-def violators():
+def violators(stats, ut):
     cvit = stats.jobs.account('cvit')
     in_long = cvit["Partition"].str.match('long')
     no_resv = cvit["Reservation"].isna() 
@@ -33,7 +30,7 @@ def violators():
         print('scancel --signal HUP {}'.format(row['JobId']), end=' ')
         print("# {} <{}>".format(name, email))
 
-def info_all():
+def info_all(stats):
     def _print(title, _object):
         print(title)
         print("-"*len(title))
@@ -44,14 +41,17 @@ def info_all():
     for account in ['cvit', 'research']:
         _print(account, stats.jobs.account(account))
 
-if __name__ == '__main__':
+def main():
+    Stats = namedtuple('Stats', 'jobs nodes')
+    ut = UserTable()
+    stats = Stats(jobs=ScontrolTable(), nodes=ScontrolNodesTable())
     actions = {
-            "violators": violators,
+            "violators": lambda: violators(stats, ut),
             "cvit": lambda: print(stats.jobs.account('cvit')),
             "nlp": lambda: print(stats.jobs.account('nlp')),
             "research": lambda:  print(stats.jobs.account('research')),
             "summary": lambda: print(summarize(stats.jobs, stats.nodes)),
-            "all": info_all
+            "all": lambda: info_all(stats)
     }
 
     parser = ArgumentParser()
@@ -60,3 +60,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     actions[args.op]()
 
+if __name__ == '__main__':
+    main()

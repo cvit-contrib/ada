@@ -5,6 +5,7 @@ import humanfriendly
 import re
 from collections import namedtuple
 from ada.users import UserTable
+import itertools
 
 class ScontrolEntry:
     def __init__(self, _string):
@@ -59,7 +60,14 @@ class ScontrolTable:
         ndf["cpu"] = self.df["cpu"]/40
         ndf["mem"] = self.df["mem"]/M
         ndf["gres/gpu"] = self.df["gres/gpu"]/4
-        variance = ndf.var(axis=1)
+        # variance = ndf.var(axis=1)
+        keys = ['cpu', 'mem', 'gres/gpu']
+        variances = {}
+        for pair in itertools.combinations(keys, 2):
+            variances[pair] = ndf[list(pair)].var(axis=1)
+
+        variance = pd.DataFrame.from_dict(variances).max(axis=1)
+
         # ndf["var"] = variance
         end = len(self.df.columns)
         self.df.insert(end, 'node-equivalent', value=ndf.max(axis=1))

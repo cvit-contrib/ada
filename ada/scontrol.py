@@ -59,8 +59,11 @@ class ScontrolTable:
         ndf["cpu"] = self.df["cpu"]/40
         ndf["mem"] = self.df["mem"]/M
         ndf["gres/gpu"] = self.df["gres/gpu"]/4
+        variance = ndf.var(axis=1)
+        # ndf["var"] = variance
         end = len(self.df.columns)
         self.df.insert(end, 'node-equivalent', value=ndf.max(axis=1))
+        self.df.insert(end+1, 'var', value=variance)
         # self.df.assign(node_equivalent=ndf.values)
         # self.df["node-equivalent"] = ndf.max(axis=1)
 

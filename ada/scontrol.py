@@ -23,6 +23,7 @@ class ScontrolEntry:
             'TRES', 'JobId', 
             # 'SubmitTime', 
             'RunTime',
+            'TimeLimit',
             'UserId',
             'Account', 
             'GroupId', 'JobState', 

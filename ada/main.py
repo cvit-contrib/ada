@@ -6,13 +6,15 @@ import pandas as pd
 from collections import defaultdict
 import humanfriendly
 from collections import namedtuple
-from ada.users import UserTable
-from ada.scontrol import ScontrolTable, ScontrolNodesTable
-from ada.summary import summarize
+from .users import UserTable
+from .scontrol import ScontrolTable, ScontrolNodesTable
+from .summary import summarize
 from argparse import ArgumentParser
 from datetime import timedelta
 import math
 pd.set_option('expand_frame_repr', False)
+pd.set_option('display.max_rows', None)
+
 
 time_limit = 0
 cpu_limit_wo_gpu = 5

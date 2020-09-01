@@ -18,7 +18,6 @@ class State:
     def __init__(self, fname):
         self.fname = fname
         self.load()
-        self.counts = {}
 
     def load(self):
         if os.path.exists(self.fname):
@@ -28,6 +27,7 @@ class State:
                 self.counts = serialized['counts']
         else:
             self.actions = []
+            self.counts = {}
 
     def save(self):
         serialized = {
@@ -50,7 +50,7 @@ class State:
             self.save()
 
             # The following is critical, handle with care.
-            # sp.Popen(cmd, shell=True)
+            sp.Popen(cmd, shell=True)
 
 
 

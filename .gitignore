@@ -1,4 +1,6 @@
 *.pyc
 __pycache__
 stats/logs
-build/
+build
+dist
+*.egg-info

@@ -36,7 +36,7 @@ class State:
         }
 
     def issue_kill(self, account, jobId, nodeList):
-        cmd = 'scancel -s SIGHUP {} && sleep 30m && scancel -s SIGTERM {}'.format(jobId, jobId)
+        cmd = 'scancel -s HUP {} && sleep 30m && scancel -s KILL {}'.format(jobId, jobId)
         if cmd not in self.actions:
             # handle
             logging.info(cmd)

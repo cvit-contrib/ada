@@ -35,22 +35,23 @@ class State:
             "counts": self.counts
         }
 
-    def issue_kill(self, account, jobId, nodeList):
-        cmd = 'scancel -s HUP {} && sleep 30m && scancel -s KILL {}'.format(jobId, jobId)
-        if cmd not in self.actions:
-            # handle
-            logging.info(cmd)
+        with open(self.fname, 'w+') as fp:
+            json.dump(serialized, fp)
 
+
+    def issue_kill(self, account, jobId, nodeList):
+        cmd = 'scancel -b -s HUP {} && sleep 30m && scancel -b -s KILL {}'.format(jobId, jobId)
+        if cmd not in self.actions:
             if account not in self.counts:
                 self.counts[account] = 0
 
-            self.counts[account] += 1
-            self.actions.append(cmd)
-
-            self.save()
-
-            # The following is critical, handle with care.
-            sp.Popen(cmd, shell=True)
+            if self.counts[account] < 15:
+                self.counts[account] += 1
+                self.actions.append(cmd)
+                self.save()
+                logging.info(cmd)
+                # The following is critical, handle with care.
+                # sp.Popen(cmd, shell=True)
 
 
 
@@ -60,8 +61,9 @@ def run(cmd):
 
 def execute(state, line, random_threshold):
     account, jobId, nodeList = line.split(',')
+    logging.info("processing {}".format(line))
     if random.random() < random_threshold:
-        logger.info(line)
+        logger.info("issuing kill {}".format(line))
         state.issue_kill(account, jobId, nodeList)
 
 if __name__ == '__main__':

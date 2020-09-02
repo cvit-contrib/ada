@@ -4,8 +4,13 @@ import time
 import json
 import os
 import sys
+import tempfile
 from argparse import ArgumentParser
 import logging
+
+def run(cmd):
+    output = sp.check_output(cmd, shell=True).decode("utf-8")
+    return output
 
 logging.basicConfig(
     level=logging.INFO,
@@ -49,15 +54,29 @@ class State:
                 self.counts[account] += 1
                 self.actions.append(cmd)
                 self.save()
-                logging.info(cmd)
                 # The following is critical, handle with care.
-                # sp.Popen(cmd, shell=True)
+                logging.info(cmd)
+                sp.Popen(cmd, shell=True)
+                self.mail_cvit_sudo(cmd)
+        else:
+            logging.info("action already handled and backgrounded;")
+
+    def mail_cvit_sudo(self, cmd):
+        logging.info("sending mail...")
+        args = ['mail', '-s', '[chaos-monkey]', 'cvit-sudo@googlegroups.com']
+        fpath = None
+        with tempfile.NamedTemporaryFile('w+', delete=False) as fp:
+            fp.write(cmd)
+            fpath = fp.name
+            logging.info(fpath)
+
+        with open(fpath, 'r') as fp:
+            proc = sp.Popen(args, stdin=fp)
+            proc.wait()
+        
 
 
 
-def run(cmd):
-    output = sp.check_output(cmd, shell=True).decode("utf-8")
-    return output
 
 def execute(state, line, random_threshold):
     account, jobId, nodeList = line.split(',')
